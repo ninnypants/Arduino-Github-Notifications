@@ -1,6 +1,7 @@
 import web
 import json
 import serial
+import httplib
 
 urls = (".*", "handler")
 
@@ -18,9 +19,16 @@ class handler:
         payload = json.loads(data.payload)
         s = serial.Serial(SERIAL_PORT, SERIAL_BAUD, timeout=1)
 
+        repository = payload['repository']
+
         commits = payload['commits']
         for commit in commits:
-            message = "0,%s,%s" % (commit['added'], commit['removed'])
+            request = httplib.HTTPSConnection('api.github.com')
+            request.request("GET", "/repos/%s/%s/commits/%s" % (repository['owner']['name'], repository['name'], commit['id']))
+            response = request.getresponse()
+            data = response.read()
+            c = json.loads(data)
+            message = "0,%s,%s" % (c['stats']['additions'], c['stats']['deletions'])
             s.write(message)
         s.close()
 
