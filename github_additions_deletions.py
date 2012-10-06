@@ -1,5 +1,6 @@
 import web
 import json
+import time
 import serial
 import httplib
 
@@ -18,7 +19,7 @@ class handler:
         data = web.input()
         payload = json.loads(data.payload)
         s = serial.Serial(SERIAL_PORT, SERIAL_BAUD, timeout=1)
-
+        time.sleep(1)
         repository = payload['repository']
 
         commits = payload['commits']
@@ -28,6 +29,7 @@ class handler:
             response = request.getresponse()
             c = json.loads(response.read())
             message = "0,%s,%s" % (c['stats']['additions'], c['stats']['deletions'])
+            print message
             s.write(message)
         s.close()
 
