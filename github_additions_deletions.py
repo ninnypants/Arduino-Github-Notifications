@@ -29,7 +29,6 @@ class handler:
             response = request.getresponse()
             c = json.loads(response.read())
             message = "0,%s,%s" % (c['stats']['additions'], c['stats']['deletions'])
-            print message
             s.write(message)
         s.close()
 
