@@ -6,7 +6,7 @@ import httplib
 
 urls = (".*", "handler")
 
-SERIAL_PORT = '/dev/tty.usbmodemfa131'
+SERIAL_PORT = '/dev/tty.usbmodemfd121'
 SERIAL_BAUD = 9600
 
 
